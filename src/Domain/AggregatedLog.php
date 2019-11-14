@@ -1,4 +1,5 @@
 <?php
+
 namespace Domain;
 /**
  * Created by PhpStorm.
@@ -6,7 +7,6 @@ namespace Domain;
  * Date: 14.11.19
  * Time: 17:17
  */
-
 class AggregatedLog
 {
     /**
@@ -32,9 +32,13 @@ class AggregatedLog
     {
 
         if ($countryId) {
-            $numberIds = $this->connection->readDataFromDB('numbers', [
+            $numbers = $this->connection->readDataFromDB('numbers', [
                 'cnt_id' => $countryId
             ]);
+            $numberIds = array_map(function (array $row) {
+                return $row['num_id'];
+            }, $numbers);
+
         } else {
             $numberIds = null;
         }
