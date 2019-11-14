@@ -1,13 +1,13 @@
 <?php
 
-namespace Domain;
+namespace Domain\AggregatedLog;
 /**
  * Created by PhpStorm.
  * User: dmitriy
  * Date: 14.11.19
  * Time: 17:17
  */
-class AggregatedLog
+class FormattedLogsProvider
 {
     /**
      * @var \DB\DBConnectionInterface
@@ -16,23 +16,22 @@ class AggregatedLog
 
 
     /**
-     * AggregatedLog constructor.
+     * FormattedLogsProvider constructor.
      */
     public function __construct(\DB\DBConnectionInterface $connection)
     {
         $this->connection = $connection;
     }
 
-    public function retrieveAggregatedLogsInfo(
+    public function retrieveFormattedLogs(
         \DateTimeImmutable $from,
         \DateTimeImmutable $to,
         string $countryId = null,
         string $userId = null
     ): array
     {
-
         if ($countryId) {
-            $numbers = $this->connection->readDataFromDB('numbers', [
+            $numbers   = $this->connection->readDataFromDB('numbers', [
                 'cnt_id' => $countryId
             ]);
             $numberIds = array_map(function (array $row) {
@@ -42,7 +41,6 @@ class AggregatedLog
         } else {
             $numberIds = null;
         }
-
 
         // Lets pretend we have some things inside: empty value checks, manipulation with DTOS etc
         $aggregatedLogs = $this->connection->readDataFromDB('send_log_aggregated', [
